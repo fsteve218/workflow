@@ -1,3 +1,4 @@
+<!-- partial:partial/_header.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,6 +6,7 @@
     <meta name="viewport" content="width=<device-width>, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <!-- inject:css -->
+    <link rel="stylesheet" href="css/app.css">
     <!-- endinject -->
     <title>My Workflow</title>
 </head>
@@ -33,3 +35,33 @@
             </div>
         </div>
     </div>
+<!-- partial -->
+    <div class="container">
+        
+        <div id="gallery" class="gallery row">
+            <script id="template" type="x-tmpl-mustache">
+                    
+                {{#gallery}}
+                    <div class="col-sm-6 col-md-4 mb-5">
+                        <div class="thumbnail">
+                            <img src="http://placehold.it/500x500" alt="" class="img-fluid">
+                        </div>
+                        <div class="caption">
+                            <div class="text-center">
+                                {{destiny}}
+                            </div>
+                        </div>
+                    </div>
+                {{/gallery}}
+            </script>
+        </div>
+        
+    </div>
+<!-- partial:partial/_footer.html -->
+
+   <!-- inject:js -->
+   <script src="js/main.js"></script>
+   <!-- endinject -->
+</body>
+</html>
+<!-- partial -->

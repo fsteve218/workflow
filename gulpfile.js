@@ -15,7 +15,7 @@ const minify = require('gulp-minify');
 const cssmin = require('gulp-cssmin');
 const htmlmin = require('gulp-htmlmin');
 const rename = require('gulp-rename');
-
+const inject = require('gulp-inject');
 // Source Paths
 const SOURCEPATHS = {
     sassSource : 'src/scss/*.scss',
@@ -52,7 +52,7 @@ gulp.task( 'sass', () => {
 
 // Sass compile & merge with bootstrap
 gulp.task( 'compress-css', ['sass'], () => {
-    gulp.src(APPPATH.css+'/.css')
+    gulp.src(APPPATH.css+'/*.css')
         .pipe( cssmin() )
         .pipe( rename({suffix:'.min'}) )
         .pipe( gulp.dest(APPPATH.css) );
@@ -109,6 +109,25 @@ gulp.task( 'compress-js', ['js'], () => {
         .pipe( gulp.dest( APPPATH.js ) );
 })
 
+// Inject
+gulp.task('inject', ['html','js','sass'], function () {
+    // It's not necessary to read the files (will speed up things), we're only after their paths:
+    var sources = gulp.src([`${APPPATH.js}/*.js`, `!${APPPATH.js}/*-min.js`,
+                `${APPPATH.css}/*.css`, `!${APPPATH.css}/*.min.css`], {read: false});
+   
+    return gulp.src([`${APPPATH.root}/*.html`])
+        .pipe( inject(sources,{relative:true}) )
+        .pipe(gulp.dest(APPPATH.root));
+});
+// Inject & Inject Min
+gulp.task('inject-min', ['compress-html','compress-js','compress-css'], function () {
+    // It's not necessary to read the files (will speed up things), we're only after their paths:
+    var sources = gulp.src([`${APPPATH.js}/*-min.js`, `${APPPATH.css}/*.min.css`], {read: false});
+   
+    return gulp.src([`${APPPATH.root}/*.html`])
+        .pipe(inject(sources,{relative:true}) )
+        .pipe(gulp.dest(APPPATH.root));
+});
 // Browsersync Server
 gulp.task( 'serve', ['sass'], () => {
     browserSync.init([`${APPPATH.css}/*.css`,`${APPPATH.root}/*.html`,`${APPPATH.js}/*.js`],{
@@ -119,9 +138,9 @@ gulp.task( 'serve', ['sass'], () => {
 })
 
 // Watch for changes
-gulp.task( 'watch', ['serve','sass', 'html', 'clean-html', 'js', 'clean-js' ,'fonts', 'images' ], () => {
+gulp.task( 'watch', ['serve','sass', 'inject', 'clean-html', 'js', 'clean-js' ,'fonts', 'images' ], () => {
     gulp.watch( [SOURCEPATHS.sassSource], ['sass'])
-    gulp.watch( [SOURCEPATHS.htmlSource,SOURCEPATHS.htmlPartialSource], ['html'] )
+    gulp.watch( [SOURCEPATHS.htmlSource,SOURCEPATHS.htmlPartialSource], ['inject'] )
     gulp.watch( [SOURCEPATHS.jsSource], ['js'])
 })
 
@@ -133,4 +152,4 @@ gulp.task( 'test', () => {
 
 // Default task
 gulp.task( 'default', ['watch'] );
-gulp.task( 'production', ['compress-html','compress-js','compress-css', 'fonts', 'images' ] );
+gulp.task( 'production', ['inject-min','compress-js','compress-css', 'fonts', 'images' ] );
