@@ -122,7 +122,7 @@ gulp.task( 'serve', ['sass'], () => {
 gulp.task( 'watch', ['serve','sass', 'html', 'clean-html', 'js', 'clean-js' ,'fonts', 'images' ], () => {
     gulp.watch( [SOURCEPATHS.sassSource], ['sass'])
     gulp.watch( [SOURCEPATHS.htmlSource,SOURCEPATHS.htmlPartialSource], ['html'] )
-    gulp.watch( [SOURCEPATHS.jsSource], ['scripts'])
+    gulp.watch( [SOURCEPATHS.jsSource], ['js'])
 })
 
 gulp.task( 'test', () => {
