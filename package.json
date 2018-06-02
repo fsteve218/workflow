@@ -6,10 +6,11 @@
   "scripts": {
     "start": "gulp",
     "build": "gulp production",
-    "test": "gulp test",
+    "front-end": "gulp test",
     "server-watch": "nodemon server/server.js",
     "watch":"gulp watch-server",
-    "server": "node server/server.js"
+    "server": "node server/server.js",
+    "test":"mocha /server/**/*.test.js"
   },
   "keywords": [
     "npm",

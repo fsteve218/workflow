@@ -16,8 +16,9 @@ https://www.udemy.com/modern-web-development-with-sass-gulp-npm-web-workflows/le
 # Production or Development
 - use "npm start" to start browser-sync server monitoring the /src file & serving from /app
 - use "npm run build" to create production version using minified html,css,js
-- use "npm test" to test if the production version works  
+- use "npm run front-end" to test if the production version works  
 - use "npm run server" to run an express server @server/server.js
 - use "npm run server-watch" to monitor express server @server/server.js for changes
 - use "npm run watch" to start browser-sync server as well as express server
+- use "npm test" to run test files in server/ using mocha
 
