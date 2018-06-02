@@ -1,25 +1,59 @@
 <!-- partial:partial/_header.html -->
 <!-- partial -->
-    <div class="container">
-        
-        <div id="gallery" class="gallery row">
-            <script id="template" type="x-tmpl-mustache">
-                    
-                {{#gallery}}
-                    <div class="col-sm-6 col-md-4 mb-5">
-                        <div class="thumbnail">
-                            <img src="http://placehold.it/500x500" alt="" class="img-fluid">
-                        </div>
-                        <div class="caption">
-                            <div class="text-center">
-                                {{destiny}}
-                            </div>
-                        </div>
-                    </div>
-                {{/gallery}}
-            </script>
+    <section id="main" class="container py-5">
+        <div class="row d-flex flex-column">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h1>Easy to Use</h1>
+                </div>
+                <div class="card-body">
+                    <h2 class="card-title">NPM</h2>
+                    <p class="card-text">
+                        Use NPM package manager to add modules to your project
+                    </p>
+                            
+                                
+                    <h2 class="card-title">GULP</h2>
+                    <p>
+                        Comes with an advanced GULP file for sourcing components
+                    </p>
+                    <ul class="list-group mb-4">
+                        <li class="list-group-item">Copy Fonts, JS, & CSS from node modules</li>
+                        <li class="list-group-item">
+                            Copy HTML files from src folder
+                        </li>
+                        <li class="list-group-item">
+                            Automatically inject partials into HTML file
+                        </li>
+                        <li class="list-group-item">
+                            Automatically inject js & css files into <html></html>
+                        </li>
+                        <li class="list-group-item">
+                            Automatically compile css
+                        </li>
+                        <li class="list-group-item">
+                            Automatically copy JS & use browserify to allow for using ES6 modules
+                        </li>
+                        <li class="list-group-item">Browsersync automatically detects changes & reloads browser as you work</li>
+                        
+                    </ul>
+
+                    <h2>Using</h2>
+                    <p>You can configure what fonts,js & css are imported automatically from node modules by editing the top of the gulpfile.js</p>
+                    <p>Then build your project in the src folder, keeping css/scss in the scss file & js in the js folder, images in the img folder, and any fonts you want to use in the fonts folder</p>
+                    <p> You can use partials & auto-inject js/css in your html files (see index.html for example)</p>
+                    <p>Your files will automatically be copied to the app folder</p>
+
+                    <p>Then use the following commands:</p>
+                    <ul>
+                        <li><strong>npm start:</strong> Run a build server that reloads browser as changes are made</li>
+                        <li><strong>npm run build:</strong> Creates a production build that uses minified JS/CSS</li>
+                        <li><strong>npm test:</strong>Test the build is correct</li>
+                    </ul>
+                    <p>In case of error like css files not being injected, run the command a second time</p>
+                </div>
         </div>
         
-    </div>
+    </section>
 <!-- partial:partial/_footer.html -->
 <!-- partial -->

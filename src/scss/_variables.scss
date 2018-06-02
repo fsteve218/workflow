@@ -1,0 +1,41 @@
+// Copy variables from "node_modules/bootstrap/scss/_variables.scss"
+// To alter bootstrap variables
+
+// Colors
+$blue:    #2f5170;
+$indigo:  #6610f2;
+$purple:  #6f42c1;
+$pink:    #e83e8c;
+$red:     #700712;
+$orange:  #fd7e14;
+$yellow:  #ffc107;
+$green:   #045e19;
+$teal:    #f0f7f5;
+$cyan:    #17a2b8;
+
+// Greys 
+// stylelint-disable
+$white:    #fff;
+$gray-100: #f8f9fa;
+$gray-200: #e9ecef;
+$gray-300: #dee2e6;
+$gray-400: #ced4da;
+$gray-500: #adb5bd;
+$gray-600: #6c757d;
+$gray-700: #495057;
+$gray-800: #343a40;
+$gray-900: #212529;
+$black:    #000;
+
+// Borders
+$border-radius: 0;
+
+// Theme Colors
+$primary:       $blue;
+$secondary:     $gray-600;
+$success:       $green;
+$info:          $gray-300;
+$warning:       $yellow;
+$danger:        $red;
+$light:         $gray-100;
+$dark:          $gray-800;

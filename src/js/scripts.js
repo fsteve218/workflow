@@ -1,7 +1,4 @@
-global.jQuery = require('jquery');
 global.d = console.log;
-bootstrap = require('bootstrap');
-mustache = require('mustache');
 
 jQuery(document).ready( function($){
     $.getJSON('data.json', () => {

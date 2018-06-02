@@ -17,10 +17,13 @@ const htmlmin = require('gulp-htmlmin');
 const rename = require('gulp-rename');
 const inject = require('gulp-inject');
 // Source Paths
+
+
 const SOURCEPATHS = {
     sassSource : 'src/scss/*.scss',
     htmlSource : 'src/*.html',
     htmlPartialSource : 'src/partial/*.html',
+    fontSource : 'src/fonts/**',
     jsSource : 'src/js/**',
     imgSource : 'img/**'
 }
@@ -34,17 +37,41 @@ const APPPATH = {
     img: 'app/img'
 }
 
+// Javscripts to source from node modules
+// Will be concated in order & included before local js
+const JSCRIPTS = [
+    './node_modules/jquery/dist/jquery.min.js',
+    './node_modules/popper.js/dist/umd/popper.min.js',
+    './node_modules/bootstrap/dist/js/bootstrap.min.js',
+    './node_modules/handlebars/dist/handlebars.min.js',
+    './node_modules/jquery-form/src/jquery.form.js'
+];
+
+// Fonts to source from node modules
+const FONTS = [
+    './node_modules/bootstrap/fonts/*.{eot,svg,ttf,woff,woff2}',
+    './node_modules/font-awesome/fonts/*'
+];
+
+// CSS files to source from node modules
+// Will be concated in order & included before local js
+// NOTE: better to import bootstrap from scss so variables can be altered
+const CSSs = [
+    './node_modules/font-awesome/css/font-awesome.css',
+    // './node_modules/bootstrap/dist/css/bootstrap.css'
+]
 
 // Sass compile & merge with bootstrap
 gulp.task( 'sass', () => {
-    const bootstrapCSS = gulp.src('./node_modules/bootstrap/dist/css/bootstrap.css');
-    const sassFiles = gulp.src('src/scss/app.scss')
-        .pipe( autoprefixer({
-            browsers: ['last 10 versions'],
-            cascade: false
-        }) )
-        .pipe( sass({outputStyle: 'expanded' }) ).on('error', sass.logError)
-    return merge( bootstrapCSS, sassFiles )
+    var nodeCSS;
+    if( CSSs.length > 0 ) nodeCSS = gulp.src(CSSs);
+    const sassFiles = gulp.src('src/scss/app.scss');
+
+    if( nodeCSS ) var stream = merge( nodeCSS, sassFiles );
+    else var stream = sassFiles;
+    return stream
+        .pipe( sass({outputStyle: 'expanded',errLogToConsole: true}) )
+            .on( 'error', sass.logError )
         .pipe( concat('app.css') )
         .pipe( gulp.dest(APPPATH.css) );
     
@@ -68,9 +95,11 @@ gulp.task( 'images', () => {
 });
 
 // Fonts
-gulp.task( 'fonts', () => {
-    gulp.src('./node_modules/bootstrap/fonts/*.{eot,svg,ttf,woff,woff2}')
-        .pipe( gulp.dest(APPPATH.fonts) );
+gulp.task( 'src-fonts', () => {
+    if( FONTS ) {
+        return gulp.src([...FONTS,SOURCEPATHS.fonts])
+            .pipe( gulp.dest(APPPATH.fonts) );
+    }
 })
 
 
@@ -90,9 +119,11 @@ gulp.task( 'compress-html', ['html'], () => {
         .pipe( gulp.dest( APPPATH.root ) );
 })
 
+
 // Javascripts
 gulp.task( 'js', ['clean-js'], () => {
-    return gulp.src(SOURCEPATHS.jsSource)
+    const scripts = [...JSCRIPTS,SOURCEPATHS.jsSource];
+    return gulp.src( scripts )
         .pipe( concat('main.js') )
         .pipe( browserify() ).on( 'error', e => d(e.message) )
         .pipe( gulp.dest( APPPATH.js ) );
@@ -110,7 +141,7 @@ gulp.task( 'compress-js', ['js'], () => {
 })
 
 // Inject
-gulp.task('inject', ['html','js','sass'], function () {
+gulp.task('inject', ['html'], function () {
     // It's not necessary to read the files (will speed up things), we're only after their paths:
     var sources = gulp.src([`${APPPATH.js}/*.js`, `!${APPPATH.js}/*-min.js`,
                 `${APPPATH.css}/*.css`, `!${APPPATH.css}/*.min.css`], {read: false});
@@ -119,8 +150,9 @@ gulp.task('inject', ['html','js','sass'], function () {
         .pipe( inject(sources,{relative:true}) )
         .pipe(gulp.dest(APPPATH.root));
 });
+
 // Inject & Inject Min
-gulp.task('inject-min', ['compress-html','compress-js','compress-css'], function () {
+gulp.task('inject-min', ['compress-js','compress-css','compress-html'], function () {
     // It's not necessary to read the files (will speed up things), we're only after their paths:
     var sources = gulp.src([`${APPPATH.js}/*-min.js`, `${APPPATH.css}/*.min.css`], {read: false});
    
@@ -128,6 +160,7 @@ gulp.task('inject-min', ['compress-html','compress-js','compress-css'], function
         .pipe(inject(sources,{relative:true}) )
         .pipe(gulp.dest(APPPATH.root));
 });
+
 // Browsersync Server
 gulp.task( 'serve', ['sass'], () => {
     browserSync.init([`${APPPATH.css}/*.css`,`${APPPATH.root}/*.html`,`${APPPATH.js}/*.js`],{
@@ -138,7 +171,7 @@ gulp.task( 'serve', ['sass'], () => {
 })
 
 // Watch for changes
-gulp.task( 'watch', ['serve','sass', 'inject', 'clean-html', 'js', 'clean-js' ,'fonts', 'images' ], () => {
+gulp.task( 'watch', ['serve','inject','src-fonts','images' ], () => {
     gulp.watch( [SOURCEPATHS.sassSource], ['sass'])
     gulp.watch( [SOURCEPATHS.htmlSource,SOURCEPATHS.htmlPartialSource], ['inject'] )
     gulp.watch( [SOURCEPATHS.jsSource], ['js'])
@@ -152,4 +185,4 @@ gulp.task( 'test', () => {
 
 // Default task
 gulp.task( 'default', ['watch'] );
-gulp.task( 'production', ['inject-min','compress-js','compress-css', 'fonts', 'images' ] );
+gulp.task( 'production', ['src-fonts', 'images', 'inject-min' ] );
