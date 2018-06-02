@@ -97,7 +97,7 @@ gulp.task( 'images', () => {
 // Fonts
 gulp.task( 'src-fonts', () => {
     if( FONTS ) {
-        return gulp.src([...FONTS,SOURCEPATHS.fonts])
+        return gulp.src([...FONTS,SOURCEPATHS.fontSource])
             .pipe( gulp.dest(APPPATH.fonts) );
     }
 })
@@ -171,10 +171,12 @@ gulp.task( 'serve', ['sass'], () => {
 })
 
 // Watch for changes
-gulp.task( 'watch', ['serve','inject','src-fonts','images' ], () => {
+gulp.task( 'watch', ['src-fonts','serve','inject','src-fonts','images' ], () => {
     gulp.watch( [SOURCEPATHS.sassSource], ['sass'])
     gulp.watch( [SOURCEPATHS.htmlSource,SOURCEPATHS.htmlPartialSource], ['inject'] )
     gulp.watch( [SOURCEPATHS.jsSource], ['js'])
+    gulp.watch( [SOURCEPATHS.imgSource], ['images'])
+    gulp.watch( [SOURCEPATHS.fontSource], ['src-fonts'])
 })
 
 gulp.task( 'test', () => {
@@ -185,4 +187,4 @@ gulp.task( 'test', () => {
 
 // Default task
 gulp.task( 'default', ['watch'] );
-gulp.task( 'production', ['src-fonts', 'images', 'inject-min' ] );
+gulp.task( 'production', ['images', 'inject-min' ] );
