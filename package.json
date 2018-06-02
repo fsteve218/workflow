@@ -6,7 +6,10 @@
   "scripts": {
     "start": "gulp",
     "build": "gulp production",
-    "test": "gulp test"
+    "test": "gulp test",
+    "server-watch": "nodemon server/server.js",
+    "watch":"gulp watch-server",
+    "server": "node server/server.js"
   },
   "keywords": [
     "npm",
@@ -31,10 +34,14 @@
     "gulp-inject-partials": "^1.0.4",
     "gulp-minify": "^2.1.0",
     "gulp-newer": "^1.4.0",
+    "gulp-nodemon": "^2.2.1",
     "gulp-sass": "^4.0.1",
     "jquery": "^3.3.1",
     "merge-stream": "^1.0.1",
     "mustache": "^2.3.0",
     "popper.js": "^1.14.3"
+  },
+  "dependencies": {
+    "express": "^4.16.3"
   }
 }

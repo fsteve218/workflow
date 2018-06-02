@@ -16,6 +16,7 @@ const cssmin = require('gulp-cssmin');
 const htmlmin = require('gulp-htmlmin');
 const rename = require('gulp-rename');
 const inject = require('gulp-inject');
+const nodemon = require('gulp-nodemon');
 // Source Paths
 
 
@@ -185,6 +186,18 @@ gulp.task( 'test', () => {
     })
 });
 
+// Launch the server
+gulp.task( 'server', () => {
+    return nodemon({
+     script: 'server/server.js',
+     ext: 'hbs js',
+     watch: ['server/**/*.js','views/**/*.hbs'],
+     env: { 'NODE_ENV': 'development' }
+   })
+ });
+
+
 // Default task
 gulp.task( 'default', ['watch'] );
+gulp.task( 'watch-server', ['watch','server'] );
 gulp.task( 'production', ['images', 'inject-min' ] );

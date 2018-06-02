@@ -14,6 +14,10 @@ https://www.udemy.com/modern-web-development-with-sass-gulp-npm-web-workflows/le
 3. -Run `npm install` to install the project dependencies
 
 # Production or Development
-- use "npm start" to start live server monitoring the /src file & serving from /app
+- use "npm start" to start browser-sync server monitoring the /src file & serving from /app
 - use "npm run build" to create production version using minified html,css,js
 - use "npm test" to test if the production version works  
+- use "npm run server" to run an express server @server/server.js
+- use "npm run server-watch" to monitor express server @server/server.js for changes
+- use "npm run watch" to start browser-sync server as well as express server
+
